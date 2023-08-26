@@ -1,0 +1,108 @@
+import discord
+from discord.ext import commands
+from discord.utils import get
+import yt_dlp
+import nacl
+import asyncio
+
+intents = discord.Intents.all()
+intents.members = True
+client = commands.Bot(command_prefix='$', intents=intents)
+
+queue = []
+
+@client.event
+async def on_ready():
+    print("Bot is now ready")
+    print("*****************")
+
+@client.command()
+async def basiccommands(ctx):
+    await ctx.send("$python, $play, $show_queue, $skip")
+
+@client.command()
+async def python(ctx):
+    await ctx.send("Python is an interpreted, object-oriented, high-level programming language...")
+
+@client.command()
+async def play(ctx, *, song):
+    voice_channel = ctx.author.voice.channel
+    voice_client = get(client.voice_clients, guild=ctx.guild)
+
+    if not voice_channel:
+        await ctx.send("You must be in a voice channel to use this command.")
+        return
+
+    if voice_client:
+        if voice_client.is_connected():
+            if voice_client.channel != voice_channel:
+                await voice_client.move_to(voice_channel)
+        else:
+            voice_client = await voice_channel.connect()
+    else:
+        voice_client = await voice_channel.connect()
+
+    song_info = await search_song(song)
+
+    if not song_info:
+        await ctx.send("Unable to find the requested song.")
+        return
+
+    queue.append(song_info)
+
+    if not voice_client.is_playing():
+        await play_song(ctx, voice_client)
+
+@client.command()
+async def show_queue(ctx):
+    if not queue:
+        await ctx.send("The queue is empty.")
+        return
+
+    queue_list = "\n".join([item['title'] for item in queue])
+    await ctx.send(f"Queue:\n{queue_list}")
+
+@client.command()
+async def skip(ctx):
+    voice_client = get(client.voice_clients, guild=ctx.guild)
+
+    if voice_client and voice_client.is_playing():
+        voice_client.stop()
+
+async def search_song(song):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'quiet': True,
+        'default_search': 'auto',
+        'source_address': '0.0.0.0',
+        'extractor_args': {'youtube': ' --no-playlist'},
+        'outtmpl': 'song.webm'  # output downloaded file as song.webm
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        try:
+            info = ydl.extract_info(f"ytsearch:{song}", download=True)  # change to download=True
+            song_info = {'url': 'song.webm', 'title': info['entries'][0]['title']}  # url is now 'song.webm'
+            return song_info
+        except Exception:
+            return None
+
+async def play_song(ctx, voice_client):
+    if not queue:
+        await ctx.send("The queue is empty.")
+        await voice_client.disconnect()
+        return
+
+    song = queue.pop(0)
+    voice_client.play(discord.FFmpegPCMAudio(song['url'], options="-vn"), after=lambda e: play_next(ctx))
+    await ctx.send(f"Now playing: {song['title']}")
+
+def play_next(ctx):
+    global queue
+    global voice_client
+    if queue:
+        song = queue.pop(0)
+        voice_client.play(discord.FFmpegPCMAudio(song['url'], options="-vn"), after=lambda e: play_next(ctx))
+        asyncio.run_coroutine_threadsafe(ctx.send(f"Now playing: {song['title']}"), client.loop)
+
+client.run('MTExOTEwNjAxODcxNTExOTY5Ng.GVS34v.WI1srqM9iia7fb4mXpa6is_RLW31rio1A4hc8E')

@@ -1,2 +1,2 @@
-# Discord-Music-Bot
-Made a discord music bot 
+# CSE120
+Discord bot

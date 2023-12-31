@@ -1,11 +1,11 @@
-##**CSE120 - Intro to Python**  
+#CSE120 - Intro to Python
 
-**#Overview**  
+**Overview**  
 
 Welcome to our CSE-120 Intro to Python project repository! This project was developed by our dedicated team as part of the course curriculum. Our goal was to create a Discord bot using Discord.py and Python. We intergrated multiple packages like yt-dlp, nacl, and os. You are able to play songs, skip music, queue music, and shows the current queue.  
 
 
-**#Features**  
+**Features**  
 
 Play Music,  
 
@@ -16,18 +16,18 @@ Queue Music,
 List Queue Music  
 
 
-**#Languages**  
+**Languages**  
 
 Python 100%  
 
-**#Package:**  
+**Package:**  
 
-(yt_dlp)[https://github.com/yt-dlp/yt-dlp]
-
-
+[yt_dlp](https://github.com/yt-dlp/yt-dlp)
 
 
-**#Commands**
+
+
+**Commands**
 /play [song name] --we recommend song name and artist just to insure it finds the correct song  
 
 /skip - skips the current song  
@@ -36,7 +36,7 @@ Python 100%
 
 
 
-**#Contributions**
+**Contributions**
 We welcome contributions from the community! If you'd like to contribute, please follow these guidelines:  
 
 Fork the repository.  

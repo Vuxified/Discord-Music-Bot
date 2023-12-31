@@ -1,4 +1,4 @@
-##CSE120  
+##**CSE120 - Intro to Python**  
 
 **#Overview**  
 
@@ -22,7 +22,7 @@ Python 100%
 
 **#Package:**  
 
-yt_dlp https://github.com/yt-dlp/yt-dlp
+(yt_dlp)[https://github.com/yt-dlp/yt-dlp]
 
 
 

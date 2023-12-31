@@ -43,7 +43,7 @@ Fork the repository.
 
 Create your branch: git checkout -b feature/yourchoice.  
 
-Commit your changes: git commit -m 'Add some yourchoice'.  
+Commit your changes: git commit -m 'Added some **[feature]**'.  
 
 Push to the branch: git push origin feature/yourchoice.  
 
